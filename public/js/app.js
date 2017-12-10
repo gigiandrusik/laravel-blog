@@ -31682,6 +31682,8 @@ module.exports = function spread(callback) {
 
 $(document).ready(function () {
 
+    $.get($('body').data('session-url'));
+
     $('.delete').on('submit', function () {
         return confirm('Do you want to delete this item?');
     });

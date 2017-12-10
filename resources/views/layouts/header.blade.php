@@ -17,6 +17,9 @@
                 <li>
                     <a href="{{ route('post.index') }}">Posts</a>
                 </li>
+                <li>
+                    <a href="{{ route('session.statistic') }}">Statistic</a>
+                </li>
             </ul>
         </div>
     </div>
