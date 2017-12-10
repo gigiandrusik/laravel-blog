@@ -28,16 +28,14 @@ class CategoryRepository
 
     /**
      * @param array $data
-     * @param integer $id
+     *
+     * @param Category $category
+     *
      * @return bool
      */
-    public function update(array $data, $id)
+    public function update(array $data, Category $category)
     {
-        if (Category::find($id)->update($data)) {
-            return true;
-        }
-
-        return false;
+        return $category->update($data);
     }
 
     /**
@@ -51,24 +49,28 @@ class CategoryRepository
     }
 
     /**
-     * @param int $id
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|static|static[]
-     */
-    public function findOne($id)
-    {
-        return Category::find($id);
-    }
-
-    /**
-     * @param integer $id
+     * @param Category $category
      *
      * @return bool|null
      *
      * @throws \Exception
      */
-    public function delete($id)
+    public function delete(Category $category)
     {
-        return Category::find($id)->delete();
+        return $category->delete();
+    }
+
+    /**
+     * @return array
+     */
+    public function getList()
+    {
+        $categories = [];
+
+        foreach (Category::all() as $category) {
+            $categories = array_add($categories, $category->id, $category->name);
+        }
+
+        return $categories;
     }
 }

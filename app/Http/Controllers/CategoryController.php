@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Db\Category;
 use App\Http\Requests\CategoryRequest;
 use App\Repositories\Category\CategoryRepository;
 
@@ -51,63 +52,80 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $this->categoryRepository->create($request->validated());
+        $status  = 'success';
+        $message = 'Category created successfully';
+
+        if (!$this->categoryRepository->create($request->all())) {
+
+            $status  = 'error';
+            $message = 'Cannot create category.';
+        }
 
         return redirect()->route('category.index')
-            ->with('success', 'Category created successfully');
+            ->with($status, $message);
     }
 
     /**
-     * @param int $id
+     * @param Category $category
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = $this->categoryRepository->findOne($id);
-
         return view('category.show', compact('category'));
     }
 
     /**
-     * @param int $id
+     * @param Category $category
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $category = $this->categoryRepository->findOne($id);
-
         return view('category.edit', compact('category'));
     }
 
     /**
      * @param CategoryRequest $request
      *
-     * @param integer $id
+     * @param Category $category
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $this->categoryRepository->update($request->validated(), $id);
+        $status  = 'success';
+        $message = 'Category updated successfully';
+
+        if (!$this->categoryRepository->update($request->validated(), $category)) {
+
+            $status  = 'error';
+            $message = 'Cannot update category.';
+        }
 
         return redirect()->route('category.index')
-            ->with('success', 'Category updated successfully');
+            ->with($status, $message);
     }
 
     /**
-     * @param integer $id
+     * @param Category $category
      *
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $this->categoryRepository->delete($id);
+        $status  = 'success';
+        $message = 'Category deleted successfully';
+
+        if (!$this->categoryRepository->delete($category)) {
+
+            $status  = 'error';
+            $message = 'Cannot delete category.';
+        }
 
         return redirect()->route('category.index')
-            ->with('success', 'Category deleted successfully');
+            ->with($status, $message);
     }
 }

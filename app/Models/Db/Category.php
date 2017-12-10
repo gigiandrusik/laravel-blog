@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\Db\Post[] $posts
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereName($value)
@@ -30,4 +31,12 @@ class Category extends Model
     protected $fillable = [
         'name', 'description'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

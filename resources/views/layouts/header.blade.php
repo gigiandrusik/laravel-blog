@@ -14,6 +14,9 @@
                 <li>
                     <a href="{{ route('category.index') }}">Categories</a>
                 </li>
+                <li>
+                    <a href="{{ route('post.index') }}">Posts</a>
+                </li>
             </ul>
         </div>
     </div>
