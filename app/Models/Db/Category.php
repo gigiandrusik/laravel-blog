@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \App\Models\Db\Post[] $posts
+ * @property-read \App\Models\Db\CategoryComment[] $comments
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereName($value)
@@ -38,5 +39,13 @@ class Category extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(CategoryComment::class);
     }
 }

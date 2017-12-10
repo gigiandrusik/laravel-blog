@@ -15,3 +15,6 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::resource('category', 'CategoryController');
 Route::resource('post', 'PostController');
+
+Route::post('/add-category-comment', 'CommentController@addCommentToCategory')->name('add.category.comment');
+Route::post('/add-post-comment', 'CommentController@addCommentToPost')->name('add.post.comment');

@@ -31685,6 +31685,29 @@ $(document).ready(function () {
     $('.delete').on('submit', function () {
         return confirm('Do you want to delete this item?');
     });
+
+    $('.ajax-form').on('submit', function (e) {
+
+        e.preventDefault();
+
+        var form = $(this);
+
+        axios({
+
+            method: form.prop('method'),
+            url: form.prop('action'),
+            data: form.serialize()
+
+        }).then(function (response) {
+
+            var comment = '<li class="list-group-item">' + response.data.author + ' at ' + response.data.created_at + ': ' + response.data.content + '</li>';
+
+            form.parent('.panel-body').find('ul.list-group').append(comment);
+
+            form.find('input[type="text"]').val('');
+            form.find('textarea').val('');
+        });
+    });
 });
 
 /***/ }),
