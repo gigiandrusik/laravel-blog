@@ -6,6 +6,7 @@ use App\Models\Db\Category;
 
 /**
  * Class CategoryRepository
+ *
  * @package App\Repositories\Category
  */
 class CategoryRepository
@@ -13,7 +14,7 @@ class CategoryRepository
     /**
      * @param array $data
      *
-     * @return Category|bool
+     * @return Category|false
      */
     public function create(array $data)
     {
@@ -27,25 +28,28 @@ class CategoryRepository
     }
 
     /**
+     * @param Category $category
      * @param array $data
      *
-     * @param Category $category
-     *
-     * @return bool
+     * @return Category|false
      */
-    public function update(array $data, Category $category)
+    public function update(Category $category, array $data)
     {
-        return $category->update($data);
+        if ($category->update($data)) {
+            return $category;
+        }
+
+        return false;
     }
 
     /**
-     * @param int $perPage
+     * @param null|int $perPage
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function all($perPage = 5)
+    public function paginate($perPage = null)
     {
-        return Category::query()->paginate($perPage);
+        return Category::paginate($perPage);
     }
 
     /**
@@ -65,12 +69,20 @@ class CategoryRepository
      */
     public function getList()
     {
-        $categories = [];
+        return collect(Category::all())->pluck('name', 'id')->toArray();
+    }
 
-        foreach (Category::all() as $category) {
-            $categories = array_add($categories, $category->id, $category->name);
+    /**
+     * @param Category $category
+     * @param array $data
+     * @return bool|\Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function addComment(Category $category, array $data)
+    {
+        if ($category->comments()->create($data)) {
+            return $category->comments()->latest()->first();
         }
 
-        return $categories;
+        return false;
     }
 }

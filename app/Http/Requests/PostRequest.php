@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: andrusik
- * Date: 12/10/17
- * Time: 12:03 AM
- */
 
 namespace App\Http\Requests;
 
@@ -12,20 +6,11 @@ use Illuminate\Support\Facades\Request as BaseRequest;
 
 /**
  * Class PostRequest
+ *
  * @package App\Http\Requests
  */
 class PostRequest extends Request
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -48,8 +33,8 @@ class PostRequest extends Request
      */
     public function messages()
     {
-        return array_merge(parent::messages(), [
+        return [
             'category_id.required' => 'The category is required.',
-        ]);
+        ];
     }
 }

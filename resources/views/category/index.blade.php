@@ -2,6 +2,8 @@
 
 @section('title', 'Categories')
 
+@php /**@var \App\Models\Db\Category[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\Paginator $categories*/ @endphp
+
 @section('content')
 
     <div class="row">

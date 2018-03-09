@@ -14,7 +14,7 @@ class PostRepository
     /**
      * @param array $data
      *
-     * @return Post|bool
+     * @return Post|false
      */
     public function create(array $data)
     {
@@ -33,29 +33,28 @@ class PostRepository
     }
 
     /**
+     * @param Post $post
      * @param array $data
      *
-     * @param Post $post
-     *
-     * @return bool
+     * @return Post|false
      */
-    public function update(array $data, Post $post)
+    public function update(Post $post, array $data)
     {
         if (isset($data['file']) && $image_name = FileUploadHelper::changeImage($data['file'], $post->file)) {
             $data['file'] = $image_name;
         }
 
-        return $post->update($data);
+        return $post->update($data) ? $post : false;
     }
 
     /**
-     * @param int $perPage
+     * @param null|int $perPage
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function all($perPage = 5)
+    public function paginate($perPage = null)
     {
-        return Post::query()->paginate($perPage);
+        return Post::paginate($perPage);
     }
 
     /**
@@ -69,6 +68,21 @@ class PostRepository
     {
         if (FileUploadHelper::deleteImage($post->file)) {
             return $post->delete();
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Post $post
+     * @param array $data
+     *
+     * @return bool|\Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function addComment(Post $post, array $data)
+    {
+        if ($post->comments()->create($data)) {
+            return $post->comments()->latest()->first();
         }
 
         return false;

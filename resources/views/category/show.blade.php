@@ -2,6 +2,8 @@
 
 @section('title', "Show Category $category->name")
 
+@php /**@var \App\Models\Db\Category $category*/ @endphp
+
 @section('content')
 
     <div class="row">
@@ -17,7 +19,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Name:</strong>
-                {{ $category->name}}
+                {{ $category->name }}
             </div>
         </div>
 
@@ -25,7 +27,7 @@
             <div class="form-group">
                 <strong>Description:</strong>
                <p style="word-wrap: break-word">
-                   {{ $category->description}}
+                   {{ $category->description }}
                </p>
             </div>
         </div>
@@ -57,7 +59,7 @@
                     </td>
 
                     <td>
-                        <image src="{{ asset('uploads/images') . '/' . $post->file  }}" class="img-thumbnail" width="200px" height="200px" />
+                        <image src="{{ asset('storage/images/' . $post->file) }}" class="img-thumbnail" width="200px" height="200px" />
                     </td>
                 </tr>
 

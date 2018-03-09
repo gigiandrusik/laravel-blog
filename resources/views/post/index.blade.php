@@ -2,6 +2,8 @@
 
 @section('title', 'Posts')
 
+@php /**@var \App\Models\Db\Post[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\Paginator $posts*/ @endphp
+
 @section('content')
 
     <div class="row">
@@ -60,16 +62,16 @@
                 </td>
 
                 <td>
-                    <image src="{{ asset('uploads/images') . '/' . $post->file  }}" class="img-thumbnail" width="200px" height="200px" />
+                    <image src="{{ asset('storage/images/' . $post->file)  }}" class="img-thumbnail" width="200px" height="200px" />
                 </td>
 
                 <td>
 
-                    <a class="btn btn-info" href="{{ route('post.show', $post->id) }}">Show</a>
+                    <a class="btn btn-info" href="{{ route('post.show', [$post]) }}">Show</a>
 
-                    <a class="btn btn-primary" href="{{ route('post.edit', $post->id) }}">Edit</a>
+                    <a class="btn btn-primary" href="{{ route('post.edit', [$post]) }}">Edit</a>
 
-                    {!! Form::open(['method' => 'DELETE', 'route' => ['post.destroy', $post->id], 'style'=>'display:inline', 'class' => 'delete']) !!}
+                    {!! Form::open(['method' => 'DELETE', 'route' => ['post.destroy', $post], 'style'=>'display:inline', 'class' => 'delete']) !!}
 
                     {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
 

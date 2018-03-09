@@ -6,22 +6,25 @@ use App\Repositories\Category\CategoryRepository;
 
 /**
  * Class HomeController
+ *
  * @package App\Http\Controllers
  */
-class HomeController
+class HomeController extends Controller
 {
     /**
      * @var CategoryRepository
      */
-    protected $categoryRepository;
+    protected $category;
 
     /**
      * HomeController constructor.
-     * @param CategoryRepository $categoryRepository
+     * @param CategoryRepository $category
      */
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepository $category)
     {
-        $this->categoryRepository = $categoryRepository;
+        $this->middleware('session.log');
+
+        $this->category = $category;
     }
 
     /**
@@ -29,8 +32,8 @@ class HomeController
      */
     public function index()
     {
-        $categories = $this->categoryRepository->all();
-
-        return view('site.index', compact('categories'));
+        return view('home.index', [
+            'categories' => $this->category->paginate()
+        ]);
     }
 }

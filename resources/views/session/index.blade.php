@@ -2,6 +2,9 @@
 
 @section('title', 'Statistic')
 
+@php /**@var \App\Models\Db\SessionStatistic[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\Paginator $statistics*/ @endphp
+@php /**@var array $info*/ @endphp
+
 @section('content')
 
     <ul class="list-group">

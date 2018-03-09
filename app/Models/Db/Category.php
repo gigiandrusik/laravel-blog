@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property-read \App\Models\Db\Post[] $posts
- * @property-read \App\Models\Db\CategoryComment[] $comments
+ * @property-read \App\Models\Db\Post[]|\Illuminate\Database\Eloquent\Collection $posts
+ * @property-read \App\Models\Db\Comment[]|\Illuminate\Database\Eloquent\Collection $comments
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Db\Category whereName($value)
@@ -42,10 +42,10 @@ class Category extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function comments()
     {
-        return $this->hasMany(CategoryComment::class);
+        return $this->morphMany(Comment::class, 'object');
     }
 }

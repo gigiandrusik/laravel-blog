@@ -15,26 +15,9 @@
         </div>
     </div>
 
-    @if (count($errors) > 0)
+    {!! Form::model($category, ['method' => 'PATCH', 'route' => ['category.update', $category]]) !!}
 
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with editing category<br><br>
-            <ul>
-
-                @foreach ($errors->all() as $error)
-
-                    <li>{{ $error }}</li>
-
-                @endforeach
-
-            </ul>
-        </div>
-
-    @endif
-
-    {!! Form::model($category, ['method' => 'PATCH', 'route' => ['category.update', $category->id]]) !!}
-
-    @include('category.form')
+    @include('category.form', [$category])
 
     {!! Form::close() !!}
 

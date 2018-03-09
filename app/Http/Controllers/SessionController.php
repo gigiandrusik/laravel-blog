@@ -1,48 +1,31 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: andrusik
- * Date: 12/10/17
- * Time: 9:55 PM
- */
 
 namespace App\Http\Controllers;
 
-use DB;
-use Illuminate\Http\Request;
-use App\Models\Db\SessionStatistic;
+use App\Repositories\Session\SessionRepository;
 
 /**
  * Class SessionController
+ *
  * @package App\Http\Controllers
  */
 class SessionController extends Controller
 {
     /**
-     * @param Request $request
-     *
-     * @return bool|\Illuminate\Http\RedirectResponse
+     * @var SessionRepository
      */
-    public function getSession(Request $request)
+    protected $session;
+
+    /**
+     * SessionController constructor.
+     *
+     * @param SessionRepository $session
+     */
+    public function __construct(SessionRepository $session)
     {
-        if ($request->ajax()) {
+        $this->middleware('session.log');
 
-            if (!$session = $request->session()->get('new_session')) {
-
-                $request->session()->put('new_session', true);
-
-                $session_statistic = new SessionStatistic([
-                    'user_agent' => $request->server('HTTP_USER_AGENT'),
-                    'ip'         => $request->ip(),
-                ]);
-
-                $session_statistic->save();
-            }
-
-            return false;
-        }
-
-        return redirect()->route('home');
+        $this->session = $session;
     }
 
     /**
@@ -50,14 +33,9 @@ class SessionController extends Controller
      */
     public function statistic()
     {
-        $statistics = SessionStatistic::query()->paginate(10);
-
-        $info = DB::table(SessionStatistic::getModel()->getTable())
-            ->select('user_agent', DB::raw('count(*) as total'))
-            ->groupBy('user_agent')
-            ->pluck('total','user_agent')->all();
-
-        return view('session.index', compact('statistics'))
-            ->with('info', $info);
+        return view('session.index', [
+            'statistics' => $this->session->paginate(),
+            'info' => $this->session->info()
+        ]);
     }
 }

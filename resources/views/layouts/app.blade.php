@@ -14,7 +14,8 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
 </head>
-<body data-session-url="{{ route('get.session') }}">
+<body>
+
     @include('layouts.header')
 
     <div class="container">

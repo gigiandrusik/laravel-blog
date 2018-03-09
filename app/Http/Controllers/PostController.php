@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Db\Post;
 use App\Http\Requests\PostRequest;
+use App\Http\Requests\CommentRequest;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Category\CategoryRepository;
 
 /**
  * Class PostController
+ *
  * @package App\Http\Controllers
  */
 class PostController extends Controller
@@ -16,24 +18,27 @@ class PostController extends Controller
     /**
      * @var PostRepository
      */
-    protected $postRepository;
+    protected $post;
 
     /**
      * @var CategoryRepository
      */
-    protected $categoryRepository;
+    protected $category;
 
     /**
      * PostController constructor.
      *
-     * @param PostRepository $postRepository
+     * @param PostRepository $post
      *
-     * @param CategoryRepository $categoryRepository
+     * @param CategoryRepository $category
      */
-    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository)
+    public function __construct(PostRepository $post, CategoryRepository $category)
     {
-        $this->postRepository = $postRepository;
-        $this->categoryRepository = $categoryRepository;
+        $this->middleware('session.log');
+        $this->middleware('ajax')->only(['addComment']);
+
+        $this->post = $post;
+        $this->category = $category;
     }
 
     /**
@@ -41,9 +46,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postRepository->all();
-
-        return view('post.index', compact('posts'));
+        return view('post.index', [
+            'posts' => $this->post->paginate()
+        ]);
     }
 
     /**
@@ -51,8 +56,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create')
-            ->with('categories', $this->categoryRepository->getList());
+        return view('post.create', [
+            'categories' => $this->category->getList()
+        ]);
     }
 
     /**
@@ -62,17 +68,13 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $status  = 'success';
-        $message = 'Post created successfully';
+        if ($this->post->create($request->validated())) {
 
-        if (!$this->postRepository->create($request->all())) {
-
-            $status  = 'error';
-            $message = 'Cannot create post.';
+            return redirect()->route('post.index')
+                ->with('success', 'Post created successfully!');
         }
 
-        return redirect()->route('post.index')
-            ->with($status, $message);
+        return back()->withInput();
     }
 
     /**
@@ -92,7 +94,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         return view('post.edit', compact('post'))
-            ->with('categories', $this->categoryRepository->getList());
+            ->with('categories', $this->category->getList());
     }
 
     /**
@@ -104,17 +106,13 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
-        $status  = 'success';
-        $message = 'Post updated successfully';
+        if ($this->post->update($post, $request->validated())) {
 
-        if (!$this->postRepository->update($request->validated(), $post)) {
-
-            $status  = 'error';
-            $message = 'Cannot update post.';
+            return redirect()->route('post.index')
+                ->with('success', 'Post updated successfully!');
         }
 
-        return redirect()->route('post.index')
-            ->with($status, $message);
+        return back()->withInput();
     }
 
     /**
@@ -126,16 +124,25 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $status  = 'success';
-        $message = 'Post deleted successfully';
-
-        if (!$this->postRepository->delete($post)) {
-
-            $status  = 'error';
-            $message = 'Cannot delete post.';
+        if ($this->post->delete($post)) {
+            return back()->with('success', 'Post deleted successfully.');
         }
 
-        return redirect()->route('post.index')
-            ->with($status, $message);
+        return back()->with('error', 'Cannot delete post.');
+    }
+
+    /**
+     * @param CommentRequest $request
+     * @param Post $post
+     *
+     * @return bool|\Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function addComment(CommentRequest $request, Post $post)
+    {
+        if ($comment = $this->post->addComment($post, $request->validated())) {
+            return $comment;
+        }
+
+        return false;
     }
 }

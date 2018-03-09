@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Db\Category;
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\CategoryRequest;
 use App\Repositories\Category\CategoryRepository;
 
 /**
  * Class CategoryController
+ *
  * @package App\Http\Controllers
  */
 class CategoryController extends Controller
@@ -15,16 +17,19 @@ class CategoryController extends Controller
     /**
      * @var CategoryRepository
      */
-    protected $categoryRepository;
+    protected $category;
 
     /**
      * CategoryController constructor.
      *
-     * @param CategoryRepository $categoryRepository
+     * @param CategoryRepository $category
      */
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepository $category)
     {
-        $this->categoryRepository = $categoryRepository;
+        $this->middleware('session.log');
+        $this->middleware('ajax')->only(['addComment']);
+
+        $this->category = $category;
     }
 
     /**
@@ -32,9 +37,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = $this->categoryRepository->all();
-
-        return view('category.index', compact('categories'));
+        return view('category.index', [
+            'categories' => $this->category->paginate()
+        ]);
     }
 
     /**
@@ -52,17 +57,13 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $status  = 'success';
-        $message = 'Category created successfully';
+        if ($this->category->create($request->validated())) {
 
-        if (!$this->categoryRepository->create($request->all())) {
-
-            $status  = 'error';
-            $message = 'Cannot create category.';
+            return redirect()->route('category.index')
+                ->with('success', 'Category created successfully!');
         }
 
-        return redirect()->route('category.index')
-            ->with($status, $message);
+        return back()->withInput();
     }
 
     /**
@@ -87,24 +88,19 @@ class CategoryController extends Controller
 
     /**
      * @param CategoryRequest $request
-     *
      * @param Category $category
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $status  = 'success';
-        $message = 'Category updated successfully';
+        if ($this->category->update($category, $request->validated())) {
 
-        if (!$this->categoryRepository->update($request->validated(), $category)) {
-
-            $status  = 'error';
-            $message = 'Cannot update category.';
+            return redirect()->route('category.index')
+                ->with('success', 'Category updated successfully');
         }
 
-        return redirect()->route('category.index')
-            ->with($status, $message);
+        return back()->withInput();
     }
 
     /**
@@ -116,16 +112,25 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $status  = 'success';
-        $message = 'Category deleted successfully';
-
-        if (!$this->categoryRepository->delete($category)) {
-
-            $status  = 'error';
-            $message = 'Cannot delete category.';
+        if ($this->category->delete($category)) {
+            return back()->with('success', 'Category deleted successfully!');
         }
 
-        return redirect()->route('category.index')
-            ->with($status, $message);
+        return back()->with('error', 'Cannot delete category.');
+    }
+
+    /**
+     * @param CommentRequest $request
+     * @param Category $category
+     *
+     * @return bool|\Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function addComment(CommentRequest $request, Category $category)
+    {
+        if ($comment = $this->category->addComment($category, $request->validated())) {
+            return $comment;
+        }
+
+        return false;
     }
 }

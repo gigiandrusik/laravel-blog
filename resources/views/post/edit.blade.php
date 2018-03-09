@@ -15,26 +15,9 @@
         </div>
     </div>
 
-    @if (count($errors) > 0)
+    {!! Form::model($post, ['method' => 'PATCH', 'route' => ['post.update', $post], 'enctype' => 'multipart/form-data']) !!}
 
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with editing post<br><br>
-            <ul>
-
-                @foreach ($errors->all() as $error)
-
-                    <li>{{ $error }}</li>
-
-                @endforeach
-
-            </ul>
-        </div>
-
-    @endif
-
-    {!! Form::model($post, ['method' => 'PATCH', 'route' => ['post.update', $post->id], 'enctype' => 'multipart/form-data']) !!}
-
-    @include('post.form')
+    @include('post.form', [$post])
 
     {!! Form::close() !!}
 

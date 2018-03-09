@@ -2,22 +2,15 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 /**
  * Class CategoryRequest
+ *
  * @package App\Http\Requests
  */
 class CategoryRequest extends Request
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +19,10 @@ class CategoryRequest extends Request
     public function rules()
     {
         return [
-            'name'        => 'required|string|max:255',
+            'name'        => [
+                'required', 'string',
+                Rule::unique('categories', 'name')->ignore($this->get('id'))
+            ],
             'description' => 'required|string',
         ];
     }

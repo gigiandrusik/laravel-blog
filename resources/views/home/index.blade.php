@@ -2,6 +2,8 @@
 
 @section('title', 'Blog')
 
+@php /**@var \App\Models\Db\Category[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\Paginator $categories*/ @endphp
+
 @section('content')
 
     @foreach($categories as $category)
@@ -26,7 +28,7 @@
 
                         </ul>
 
-                        {!! Form::open(['route' => 'add.category.comment', 'method' => 'post', 'class' => 'ajax-form']) !!}
+                        {!! Form::open(['route' => ['add.category.comment', $category], 'method' => 'post', 'class' => 'ajax-form']) !!}
 
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
@@ -68,7 +70,7 @@
                             </div>
                             <div class="panel-body">
 
-                                <image src="{{ asset('uploads/images') . '/' . $post->file  }}" class="img-thumbnail" width="200px" height="200px" />
+                                <image src="{{ asset('storage/images/' . $post->file)  }}" class="img-thumbnail" width="200px" height="200px" />
 
                                 {{ $post->content }}
 
@@ -86,7 +88,7 @@
 
                                         </ul>
 
-                                        {!! Form::open(['route' => 'add.post.comment', 'method' => 'post', 'class' => 'ajax-form']) !!}
+                                        {!! Form::open(['route' => ['add.post.comment', $post], 'method' => 'post', 'class' => 'ajax-form']) !!}
 
                                         <div class="col-xs-12 col-sm-12 col-md-12">
                                             <div class="form-group">

@@ -16,12 +16,11 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::resource('category', 'CategoryController');
 Route::resource('post', 'PostController');
 
-Route::post('/add-category-comment', 'CommentController@addCommentToCategory')->name('add.category.comment');
-Route::post('/add-post-comment', 'CommentController@addCommentToPost')->name('add.post.comment');
+Route::post('category/{category}/add-comment', 'CategoryController@addComment')
+    ->name('add.category.comment');
 
-Route::group(['prefix' => 'session'], function () {
-    Route::get('get', 'SessionController@getSession')->name('get.session');
-    Route::get('statistic', 'SessionController@statistic')->name('session.statistic');
-});
+Route::post('post/{post}/add-comment', 'PostController@addComment')
+    ->name('add.post.comment');
 
-
+Route::get('session/statistic', 'SessionController@statistic')
+    ->name('session.statistic');
