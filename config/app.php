@@ -177,6 +177,7 @@ return [
          * Custom service providers
          */
         App\Providers\PolymorphicServiceProvider::class,
+        App\Providers\ObserveServiceProvider::class,
     ],
 
     /*
