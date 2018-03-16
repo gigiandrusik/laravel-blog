@@ -14,6 +14,8 @@
             </div>
             <div class="panel-body">
 
+                {{ $category->description }}
+
                 <div class="panel panel-warning">
                     <div class="panel-heading">
                         <h3 class="panel-title">{{ $category->name }} comments</h3>
