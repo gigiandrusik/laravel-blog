@@ -41,45 +41,14 @@
             <div class="form-group">
                 <strong>File:</strong>
 
-                <image src="{{ asset('storage/images/' . $post->file) }}" class="img-thumbnail" width="200px" height="200px" />
+                <image src="{{ asset("storage/images/{$post->file}") }}" class="img-thumbnail" width="200px" height="200px" />
             </div>
         </div>
 
     </div>
 
     @if (count($comments = $post->comments))
-
-        <h3>Comments</h3>
-
-        <table class="table table-bordered">
-            <tr>
-                <th>Author</th>
-
-                <th>Content</th>
-
-                <th>Created</th>
-            </tr>
-
-            @foreach ($comments as $comment)
-
-                <tr>
-                    <td>
-                        {{ $comment->author }}
-                    </td>
-
-                    <td>
-                        {{ $comment->content }}
-                    </td>
-
-                    <td>
-                        {{ $comment->created_at }}
-                    </td>
-                </tr>
-
-            @endforeach
-
-        </table>
-
+        @include('partials.comments-table', ['comments' => $comments])
     @endif
 
 @endsection

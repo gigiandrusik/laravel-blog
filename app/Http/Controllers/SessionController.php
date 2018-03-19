@@ -23,8 +23,6 @@ class SessionController extends Controller
      */
     public function __construct(SessionRepository $session)
     {
-        $this->middleware('session.log');
-
         $this->session = $session;
     }
 

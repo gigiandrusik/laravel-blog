@@ -11,16 +11,23 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::group(['middleware' => ['session.log']], function () {
 
-Route::resource('category', 'CategoryController');
-Route::resource('post', 'PostController');
+    Route::get('/', 'HomeController@index')
+        ->name('home');
 
-Route::post('category/{category}/add-comment', 'CategoryController@addComment')
-    ->name('add.category.comment');
+    Route::resource('category', 'CategoryController');
+    Route::resource('post', 'PostController');
 
-Route::post('post/{post}/add-comment', 'PostController@addComment')
-    ->name('add.post.comment');
+    Route::get('session/statistic', 'SessionController@statistic')
+        ->name('session.statistic');
+});
 
-Route::get('session/statistic', 'SessionController@statistic')
-    ->name('session.statistic');
+Route::group(['middleware' => ['ajax']], function () {
+
+    Route::post('category/{category}/add-comment', 'CategoryController@addComment')
+        ->name('add.category.comment');
+
+    Route::post('post/{post}/add-comment', 'PostController@addComment')
+        ->name('add.post.comment');
+});

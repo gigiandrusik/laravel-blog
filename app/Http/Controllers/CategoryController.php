@@ -26,9 +26,6 @@ class CategoryController extends Controller
      */
     public function __construct(CategoryRepository $category)
     {
-        $this->middleware('session.log');
-        $this->middleware('ajax')->only(['addComment']);
-
         $this->category = $category;
     }
 

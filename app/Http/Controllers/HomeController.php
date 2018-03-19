@@ -22,8 +22,6 @@ class HomeController extends Controller
      */
     public function __construct(CategoryRepository $category)
     {
-        $this->middleware('session.log');
-
         $this->category = $category;
     }
 

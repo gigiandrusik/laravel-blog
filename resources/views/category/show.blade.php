@@ -15,7 +15,6 @@
     </div>
 
     <div class="row">
-
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Name:</strong>
@@ -31,7 +30,6 @@
                </p>
             </div>
         </div>
-
     </div>
 
     @if (count($posts = $category->posts))
@@ -59,7 +57,7 @@
                     </td>
 
                     <td>
-                        <image src="{{ asset('storage/images/' . $post->file) }}" class="img-thumbnail" width="200px" height="200px" />
+                        <image src="{{ asset("storage/images/{$post->file}") }}" class="img-thumbnail" width="200px" height="200px" />
                     </td>
                 </tr>
 
@@ -70,38 +68,7 @@
     @endif
 
     @if (count($comments = $category->comments))
-
-        <h3>Comments</h3>
-
-        <table class="table table-bordered">
-            <tr>
-                <th>Author</th>
-
-                <th>Content</th>
-
-                <th>Created</th>
-            </tr>
-
-            @foreach ($comments as $comment)
-
-                <tr>
-                    <td>
-                        {{ $comment->author }}
-                    </td>
-
-                    <td>
-                        {{ $comment->content }}
-                    </td>
-
-                    <td>
-                        {{ $comment->created_at }}
-                    </td>
-                </tr>
-
-            @endforeach
-
-        </table>
-
+        @include('partials.comments-table', ['comments' => $comments])
     @endif
 
 @endsection

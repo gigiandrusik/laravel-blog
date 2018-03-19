@@ -62,7 +62,7 @@
                 </td>
 
                 <td>
-                    <image src="{{ asset('storage/images/' . $post->file)  }}" class="img-thumbnail" width="200px" height="200px" />
+                    <image src="{{ asset("storage/images/{$post->file}")  }}" class="img-thumbnail" width="200px" height="200px" />
                 </td>
 
                 <td>

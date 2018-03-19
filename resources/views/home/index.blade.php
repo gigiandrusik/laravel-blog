@@ -22,41 +22,16 @@
                     </div>
                     <div class="panel-body">
 
-                        <ul class="list-group">
-
-                            @foreach($category->comments as $comment)
-                                <li class="list-group-item">{{ $comment->author }} at {{ $comment->created_at }}: {{ $comment->content }} </li>
-                            @endforeach
-
-                        </ul>
+                        @include('partials.comments', ['comments' => $category->comments])
 
                         {!! Form::open(['route' => ['add.category.comment', $category], 'method' => 'post', 'class' => 'ajax-form']) !!}
 
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-
-                                <strong>Author:</strong>
-
-                                {!! Form::text('author', null, ['placeholder' => 'Name Surname', 'class' => 'form-control', 'required' => 'required', 'pattern' => '^[A-ZА-ЯЁ][a-zа-яё]+\s[A-ZА-ЯЁ][a-zа-яё]+$']) !!}
-
-                            </div>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-
-                                <strong>Content:</strong>
-
-                                {!! Form::textarea('content', null, ['placeholder' => 'Content', 'class' => 'form-control', 'required' => 'required']) !!}
-
-                            </div>
-                        </div>
+                        @include('partials.form-fields')
 
                         {!! Form::hidden('category_id', $category->id) !!}
 
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <button type="submit" class="btn btn-primary">Add Comment</button>
-                        </div>
+                        @include('partials.submit')
+
                         {!! Form::close() !!}
 
                     </div>
@@ -72,7 +47,7 @@
                             </div>
                             <div class="panel-body">
 
-                                <image src="{{ asset('storage/images/' . $post->file)  }}" class="img-thumbnail" width="200px" height="200px" />
+                                <image src="{{ asset("storage/images/{$post->file}") }}" class="img-thumbnail" width="200px" height="200px" />
 
                                 {{ $post->content }}
 
@@ -82,41 +57,16 @@
                                     </div>
                                     <div class="panel-body">
 
-                                        <ul class="list-group">
-
-                                            @foreach($post->comments as $comment)
-                                                <li class="list-group-item">{{ $comment->author }} at {{ $comment->created_at }}: {{ $comment->content }} </li>
-                                            @endforeach
-
-                                        </ul>
+                                        @include('partials.comments', ['comments' => $post->comments])
 
                                         {!! Form::open(['route' => ['add.post.comment', $post], 'method' => 'post', 'class' => 'ajax-form']) !!}
 
-                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <div class="form-group">
-
-                                                <strong>Author:</strong>
-
-                                                {!! Form::text('author', null, ['placeholder' => 'Name Surname', 'class' => 'form-control', 'required' => 'required', 'pattern' => '^[A-ZА-ЯЁ][a-zа-яё]+\s[A-ZА-ЯЁ][a-zа-яё]+$']) !!}
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <div class="form-group">
-
-                                                <strong>Content:</strong>
-
-                                                {!! Form::textarea('content', null, ['placeholder' => 'Content', 'class' => 'form-control', 'required' => 'required']) !!}
-
-                                            </div>
-                                        </div>
+                                        @include('partials.form-fields')
 
                                         {!! Form::hidden('post_id', $post->id) !!}
 
-                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <button type="submit" class="btn btn-primary">Add Comment</button>
-                                        </div>
+                                        @include('partials.submit')
+
                                         {!! Form::close() !!}
 
                                     </div>

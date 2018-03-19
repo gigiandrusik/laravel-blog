@@ -34,9 +34,6 @@ class PostController extends Controller
      */
     public function __construct(PostRepository $post, CategoryRepository $category)
     {
-        $this->middleware('session.log');
-        $this->middleware('ajax')->only(['addComment']);
-
         $this->post = $post;
         $this->category = $category;
     }

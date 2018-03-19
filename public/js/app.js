@@ -31828,7 +31828,7 @@ $(document).ready(function () {
 
             form.parent('.panel-body').find('ul.list-group').append(comment);
 
-            form.reset();
+            form[0].reset();
         });
     });
 });
