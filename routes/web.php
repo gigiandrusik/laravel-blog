@@ -16,8 +16,10 @@ Route::group(['middleware' => ['session.log']], function () {
     Route::get('/', 'HomeController@index')
         ->name('home');
 
-    Route::resource('category', 'CategoryController');
-    Route::resource('post', 'PostController');
+    Route::resources([
+        'category' => 'CategoryController',
+        'post'     => 'PostController',
+    ]);
 
     Route::get('session/statistic', 'SessionController@statistic')
         ->name('session.statistic');
